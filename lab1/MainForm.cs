@@ -120,8 +120,8 @@ namespace lab1
             InitializeComponent();
             init();
             makePoligons();
-            //makeLetter();
-            //points_move(180, 100, 0);
+            makeLetter();
+            points_move(180, 100, 0);
             timer1.Start();
         }
 
@@ -136,23 +136,24 @@ namespace lab1
 
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
-            for(int i = 0; i < edges.Count - 3; i++)
-            {
-                edge = edges[i];
-                graphics = Graphics.FromImage(pictureBox1.Image); 
-                if(FREE_PROJECTION == 1)
-                {
-                    f = edge.First.freeProjectionXOY();
-                    s = edge.Second.freeProjectionXOY();
-                }
-                else
-                {
-                    f = edge.First.projectionXOYwithRot();
-                    s = edge.Second.projectionXOYwithRot();
-                }
-                using (Graphics graph = graphics)
-                    graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
-            }
+            Letter.paintEdges(pictureBox1);
+            //for (int i = 0; i < edges.count - 3; i++)
+            //{
+            //    edge = edges[i];
+            //    graphics = graphics.fromimage(picturebox1.image);
+            //    if (free_projection == 1)
+            //    {
+            //        f = edge.first.freeprojectionxoy();
+            //        s = edge.second.freeprojectionxoy();
+            //    }
+            //    else
+            //    {
+            //        f = edge.first.projectionxoywithrot();
+            //        s = edge.second.projectionxoywithrot();
+            //    }
+            //    using (graphics graph = graphics)
+            //        graph.drawline(mypen, new point(f.x, f.y), new point(s.x, s.y));
+            //}
 
 
             myPen = new Pen(Color.Red, 2);

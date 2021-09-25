@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 namespace lab1
 {
@@ -9,6 +11,7 @@ namespace lab1
         protected double x0 = 0, y0 = 0, z0 = 0;
         public List<Pair<Point3D, Point3D>> edges;
         public List<Point3D> points;
+        public Color color;
 
         public Figure()
         {
@@ -32,6 +35,37 @@ namespace lab1
             }
         }
 
+        public int paintEdges(PictureBox pictureBox, int typeOfProjection = 1)
+        {
+            Point3D f, s;
+            Pen myPen = new Pen(Color.Black, 1);
+            Graphics graphics = Graphics.FromImage(pictureBox.Image);
+            Pair<Point3D, Point3D> edge;
+
+            //pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+
+            for (int i = 0; i < edges.Count; i++)
+            {
+                edge = edges[i];
+                graphics = Graphics.FromImage(pictureBox.Image);
+                if (typeOfProjection == 1)
+                {
+                    f = edge.First.freeProjectionXOY();
+                    s = edge.Second.freeProjectionXOY();
+                }
+                else
+                {
+                    f = edge.First.projectionXOYwithRot();
+                    s = edge.Second.projectionXOYwithRot();
+                }
+                using (Graphics graph = graphics)
+                    graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
+            }
+            pictureBox.Refresh();
+            return 0;
+        }
+
+        #region affins
         public void move(double dx, double dy, double dz)
         {
             for (int i = points.Count - 1; i >= 0; i--)
@@ -69,7 +103,6 @@ namespace lab1
                 points[i].move(x0, y0, z0);
             }
         }
-
         public void scale(double sx, double sy, double sz)
         {
             for (int i = points.Count - 1; i >= 0; i--)
@@ -77,5 +110,6 @@ namespace lab1
                 points[i].scale(sx, sy, sz);
             }
         }
+        #endregion
     }
 }
