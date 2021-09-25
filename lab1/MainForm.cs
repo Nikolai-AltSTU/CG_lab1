@@ -119,8 +119,9 @@ namespace lab1
         {
             InitializeComponent();
             init();
+            makePoligons();
             //makeLetter();
-            points_move(180, 100, 0);
+            //points_move(180, 100, 0);
             timer1.Start();
         }
 
