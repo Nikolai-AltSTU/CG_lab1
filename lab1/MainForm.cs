@@ -18,7 +18,7 @@ namespace lab1
         protected int typeOfProjection = FREE_PROJECTION;
         //protected int typeOfProjection = XOY_PROJECTION;
 
-        double x0 = 0, y0 = 0, z0 = 0;
+        protected double x0 = 0, y0 = 0, z0 = 0;
         Figure Letter;
         List<Figure> poligons;
         List<Figure> axis;
@@ -26,7 +26,7 @@ namespace lab1
         List<Figure> allFigures;
         const int rotStep = 1;
         const int moveStep = 2;
-        int maxX = 800, maxY = 800;
+        int maxX = 800, maxY = 600;
 
         protected void init()
         {
@@ -34,6 +34,8 @@ namespace lab1
             axis = new List<Figure>();
             Letter = new Figure();
             allFigures = new List<Figure>();
+            maxX = pictureBox1.Width;
+            maxY = pictureBox1.Height;
         }
 
         protected void makeAxis()
@@ -96,15 +98,25 @@ namespace lab1
             //   new Point3D( , , )
 
             //  9 * x + 2 * y + 3 * z + 4 = 0 
-            poligons.Add(new Figure(new List<Point3D>() { new Point3D(2, 3, -28.0/3), new Point3D( 11, 5, -113.0/3), new Point3D( 4, 11, -62.0/3) }));
-            
+            //poligons.Add(new Figure(new List<Point3D>() { new Point3D(2, 3, -5), new Point3D( 11, 5, -5), new Point3D( 4, 11, -5) }));
+            poligons.Add(new Flat(1, 2, 12, 24));
+            ((Flat)poligons.Last()).addPoint(2, 3);
+            ((Flat)poligons.Last()).addPoint(11, 5);
+            ((Flat)poligons.Last()).addPoint(4, 11);
+
             // 10 * x + 4 * y + 8 * z + 2 = 0
-            poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
-            
+            //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, 5), new Point3D(16, 3, 20), new Point3D(16, 9, 20), new Point3D(8, 9, 5) })); 
+            poligons.Add(new Flat(2, 1, 10, 30));
+            ((Flat)poligons.Last()).addPoint(8, 3);
+            ((Flat)poligons.Last()).addPoint(16, 3);
+            ((Flat)poligons.Last()).addPoint(16, 9);
+            ((Flat)poligons.Last()).addPoint(8, 9);
+
+
             // 10 * x + 4 * y + 8 * z + 2 = 0
             //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
 
-            foreach(Figure fig in poligons)
+            foreach (Figure fig in poligons)
             {
                 fig.makeCircleEdges();
                 allFigures.Add(fig);
@@ -171,24 +183,40 @@ namespace lab1
             pictureBox1.Refresh();
         }
 
-        double continuousMovementX = 0, continuousMovementY = 0, continuousMovementZ = 0;
-        double continuousRotationX = 0, continuousRotationY = 0, continuousRotationZ = 0;
+        //4.	Построчное сканирование с использованием z-буфера
+        protected void lineZbuffer()
+        {
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            
+
+            
+            axis[0].paintEdges(pictureBox1, Color.Red, typeOfProjection);
+            axis[1].paintEdges(pictureBox1, Color.Green, typeOfProjection);
+            axis[2].paintEdges(pictureBox1, Color.Blue, typeOfProjection);
+
+            pictureBox1.Refresh();
+        }
+
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             // движение при зажатой клавише
-            foreach(Figure fig in allFigures)
+            foreach (Figure fig in allFigures)
             {
-                fig.move(continuousMovementX, continuousMovementY, continuousMovementZ);
-                fig.rotateX(continuousRotationX * Math.PI / 180);
-                fig.rotateY(continuousRotationY * Math.PI / 180);
-                fig.rotateZ(continuousRotationZ * Math.PI / 180);
+                if(continuousMovementX != 0 || continuousMovementY != 0 || continuousMovementZ != 0)
+                    fig.move(continuousMovementX, continuousMovementY, continuousMovementZ);
+                if (continuousRotationX != 0)
+                    fig.rotateX(continuousRotationX * Math.PI / 180);
+                if (continuousRotationY != 0)
+                    fig.rotateY(continuousRotationY * Math.PI / 180);
+                if (continuousRotationZ != 0)
+                    fig.rotateZ(continuousRotationZ * Math.PI / 180);
             }
 
             paintPictureBox();
         }
 
-
+        #region buttons
         private void стартToolStripMenuItem_Click(object sender, EventArgs e)
         {
             timerForAnimation.Start();
@@ -206,8 +234,13 @@ namespace lab1
                 " одновременно по Х и У (коэффициенты задать) в плоскости " +
                 " ХОУ с постепенным возвратом к исходному состояниюс замедлением. ", "Информация о работе");
         }
+        #endregion
 
-        // 
+        #region lab1
+
+        double continuousMovementX = 0, continuousMovementY = 0, continuousMovementZ = 0;
+        double continuousRotationX = 0, continuousRotationY = 0, continuousRotationZ = 0;
+
         double maxSpeedOfAnime = 1.02;
         double minSpeedOfAnime = 0.98;
         double speedOfAnime = 1.0;
@@ -243,14 +276,14 @@ namespace lab1
 
             foreach(Figure fig in allFigures)
             {
-                fig.move(-x, -y, -z);
-                fig.scale(speedOfAnime, speedOfAnime, 1);
                 fig.move(x, y, z);
+                fig.scale(speedOfAnime, speedOfAnime, 1);
+                fig.move(-x, -y, -z);
             }
         }
 
 
-        #region lab1
+        
         const double speed = 1.5;
         const double rotSpeed = 0.5;
         #region continuous movement and rotation

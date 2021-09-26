@@ -113,5 +113,52 @@ namespace lab1
             }
         }
         #endregion
+
+        public Flat projection(int typeOfProjection = 1)
+        {
+            Flat projection = new Flat(0, 0, 1, 0);
+            
+            Point3D f, s;
+            Pair<Point3D, Point3D> edge;
+            points.Find(x => x.X == 0 && x.Y == 1);
+
+
+            for (int i = 0; i < edges.Count; i++)
+            {
+                edge = edges[i];
+                if (typeOfProjection == 1)
+                {
+
+                    f = edge.First.freeProjectionXOY();
+                    s = edge.Second.freeProjectionXOY();
+                }
+                else
+                {
+                    f = edge.First.projectionXOYwithRot();
+                    s = edge.Second.projectionXOYwithRot();
+                }
+
+                if(projection.points.Exists(x => x == f))
+                {
+                    f = projection.points.Find(x => x == f);
+                }
+                else
+                {
+                    projection.points.Add(f);
+                }
+
+                if(projection.points.Exists(x => x == s))
+                {
+                    s = projection.points.Find(x => x == s);
+                }
+                else
+                {
+                    projection.points.Add(s);
+                }
+                projection.edges.Add(new Pair<Point3D, Point3D>(f, s)); 
+            }
+            
+            return projection;
+        }
     }
 }

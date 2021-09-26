@@ -78,7 +78,7 @@ namespace lab1
             x = x * RotZ;
         }
 
-        public void scale(double ax, double ay, double az) 
+        public void scale(double ax, double ay, double az)
         {
             Matrix ScaleM = new Matrix(
             new double[][]
@@ -93,7 +93,7 @@ namespace lab1
 
         public void move(double ax, double ay, double az)
         {
-            Matrix  moveM = new Matrix(
+            Matrix moveM = new Matrix(
             new double[][]
                 {
                     new double[] {1, 0, 0, 0},
@@ -119,11 +119,11 @@ namespace lab1
                     new double[] {sinY, -sinY * cosX, 0, 0},
                     new double[] {0, 0, 0, 1}
                 });
-            
+
             double[] res = x * projectionM;
             return new Point3D(res[0], res[1], res[2], res[3]);
         }
-        
+
         public Point3D freeProjectionXOY(double angle = Math.PI / 4)
         {
             Point point;
@@ -136,9 +136,32 @@ namespace lab1
                     new double[] { cosA, -cosA, 0, 0},
                     new double[] {0, 0, 0, 1}
                 });
-            
+
             double[] res = x * projectionM;
             return new Point3D(res[0], res[1], res[2], res[3]);
+        }
+
+        public static bool operator !=(Point3D a, Point3D b)
+        {
+            return a.X != b.X || a.Y != b.Y || a.Z != b.Z;
+        }
+        public static bool operator ==(Point3D a, Point3D b)
+        {
+            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+        }
+
+        public static Point3D operator -(Point3D a, Point3D b)
+        {
+            return new Point3D(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+        public static Point3D operator +(Point3D a, Point3D b)
+        {
+            return new Point3D(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        }
+
+        public static double operator *(Point3D a, Point3D b)
+        {
+            return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
         }
     }
 }
