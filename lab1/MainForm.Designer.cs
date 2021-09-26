@@ -81,7 +81,7 @@ namespace lab1
             this.информацияToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(816, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1013, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -251,7 +251,7 @@ namespace lab1
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.pictureBox1.Location = new System.Drawing.Point(0, 56);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(800, 500);
+            this.pictureBox1.Size = new System.Drawing.Size(1000, 600);
             this.pictureBox1.TabIndex = 17;
             this.pictureBox1.TabStop = false;
             // 
@@ -448,7 +448,7 @@ namespace lab1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(816, 565);
+            this.ClientSize = new System.Drawing.Size(1013, 670);
             this.Controls.Add(this.maskedTextBoxAnimZ);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.maskedTextBoxAnimY);

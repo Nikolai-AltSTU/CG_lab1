@@ -11,7 +11,7 @@ namespace lab1
         protected double x0 = 0, y0 = 0, z0 = 0;
         public List<Pair<Point3D, Point3D>> edges;
         public List<Point3D> points;
-        public Color color;
+        public Color color = Color.DarkGoldenrod;
 
         public Figure()
         {
@@ -29,20 +29,23 @@ namespace lab1
         {
             this.points = points;
             this.edges = new List<Pair<Point3D, Point3D>>();
-            for(int i = 0; i < points.Count; i++)
+        }
+
+        public void makeCircleEdges()
+        {
+            edges.Clear();
+            for (int i = 0; i < points.Count; i++)
             {
-                edges.Add( new Pair<Point3D, Point3D>(points[i], points[(i + 1) % points.Count]));
+                edges.Add(new Pair<Point3D, Point3D>(points[i], points[(i + 1) % points.Count]));
             }
         }
 
-        public int paintEdges(PictureBox pictureBox, int typeOfProjection = 1)
+        public int paintEdges(PictureBox pictureBox, Color color, int typeOfProjection = 1)
         {
             Point3D f, s;
-            Pen myPen = new Pen(Color.Black, 1);
+            Pen myPen = new Pen(color, 1);
             Graphics graphics = Graphics.FromImage(pictureBox.Image);
             Pair<Point3D, Point3D> edge;
-
-            //pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
             for (int i = 0; i < edges.Count; i++)
             {
@@ -61,7 +64,6 @@ namespace lab1
                 using (Graphics graph = graphics)
                     graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
             }
-            pictureBox.Refresh();
             return 0;
         }
 

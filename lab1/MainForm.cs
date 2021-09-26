@@ -13,28 +13,44 @@ namespace lab1
 {
     public partial class MainForm : Form
     {
+        const int XOY_PROJECTION = 0;
         const int FREE_PROJECTION = 1;
+        //protected int typeOfProjection = FREE_PROJECTION;
+        protected int typeOfProjection = XOY_PROJECTION;
 
         double x0 = 0, y0 = 0, z0 = 0;
         Figure Letter;
         List<Figure> poligons;
-        List<Pair<Point3D, Point3D>> edges;
-        List<Point3D> points;
+        List<Figure> axis;
+
+        List<Figure> allFigures;
         const int rotStep = 1;
         const int moveStep = 2;
-        int maxX = 800, maxY = 500;
+        int maxX = 800, maxY = 800;
 
         protected void init()
         {
             poligons = new List<Figure>();
-            edges = new List<Pair<Point3D, Point3D>>();
+            axis = new List<Figure>();
             Letter = new Figure();
-            points = new List<Point3D>();
+            allFigures = new List<Figure>();
+        }
+
+        protected void makeAxis()
+        {
+            // оси 
+            axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(3, 0, 0) } ));
+            axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(0, 3, 0) } ));
+            axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(0, 0, 3) } ));
+
+            foreach(Figure figure in axis)
+            {
+                figure.makeCircleEdges();
+            }
         }
 
         protected void makeLetter()
         {
-            const int scale = 40;
             Letter.points.Clear();
 
             // Буква С
@@ -66,49 +82,56 @@ namespace lab1
             for (int i = 0; i < half_of_num_of_points; i++)
             {
                 Letter.edges.Add(new Pair<Point3D, Point3D>(Letter.points[i], Letter.points[i + half_of_num_of_points]));
-                points.Add(Letter.points[i]);
-                points.Add(Letter.points[i + half_of_num_of_points]);
                 if (i > 0)
                 {
                     Letter.edges.Add(new Pair<Point3D, Point3D>(Letter.points[i + half_of_num_of_points - 1], Letter.points[i + half_of_num_of_points]));
                     Letter.edges.Add(new Pair<Point3D, Point3D>(Letter.points[i - 1], Letter.points[i]));
                 }
             }
-
-            foreach(var le in Letter.edges)
-            {
-                edges.Add(le);
-            }
-
-            // оси 
-            points.Add(new Point3D(0, 0, 0));
-            points.Add(new Point3D(0, 0, 0));
-            points.Add(new Point3D(0, 0, 0));
-            points.Add(new Point3D(3, 0, 0));
-            points.Add(new Point3D(0, 3, 0));
-            points.Add(new Point3D(0, 0, 3)); 
-
-            for(int i = half_of_num_of_points * 2, k = 0; k < 3; k++)
-            {
-                edges.Add(new Pair<Point3D, Point3D>(points[i + k], points[i + k + 3]));
-            }
-
-            foreach(var p in points)
-            {
-                p.scale(scale, scale, scale);
-            }
+            allFigures.Add(Letter);
         }
 
         protected void makePoligons()
         {
+            //   new Point3D( , , )
 
-        }
-        protected void points_move(double dx, double dy, double dz)
-        {
-            Letter.move(dx, dy, dz);
-            for (int i = points.Count - 1, k = 0; k < 6 ; k++)
+            //  9 * x + 2 * y + 3 * z + 4 = 0 
+            poligons.Add(new Figure(new List<Point3D>() { new Point3D(2, 3, -28.0/3), new Point3D( 11, 5, -113.0/3), new Point3D( 4, 11, -62.0/3) }));
+            
+            // 10 * x + 4 * y + 8 * z + 2 = 0
+            poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
+            
+            // 10 * x + 4 * y + 8 * z + 2 = 0
+            //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
+
+            foreach(Figure fig in poligons)
             {
-                points[i - k].move(dx, dy, dz);
+                fig.makeCircleEdges();
+                allFigures.Add(fig);
+            }
+        }
+
+        protected void scaleAllScene(int scaleVal = 40)
+        {
+            for(int i = 0; i < axis.Count; i++)
+            {
+                axis[i].scale(scaleVal, scaleVal, scaleVal);
+            }
+            for(int i = 0; i < allFigures.Count; i++)
+            {
+                allFigures[i].scale(scaleVal, scaleVal, scaleVal);
+            }
+        }
+
+        protected void moveAllScene(double dx, double dy, double dz)
+        {
+            for (int k = 0; k < allFigures.Count ; k++)
+            {
+                allFigures[k].move(dx, dy, dz);
+            }
+            for (int k = 0; k < axis.Count ; k++)
+            {
+                axis[k].move(dx, dy, dz);
             }
             x0 += dx;
             y0 += dy;
@@ -119,90 +142,31 @@ namespace lab1
         {
             InitializeComponent();
             init();
+
+            makeAxis();
             makePoligons();
             makeLetter();
-            points_move(180, 100, 0);
+
+            scaleAllScene(20);
+            moveAllScene(200,100, 0);
+
             timer1.Start();
         }
 
-        void paintPictureBox(List<Pair<Point3D, Point3D>> edges)
+        void paintPictureBox()
         {
-            Point3D f, s;
-            Graphics myGraphics = pictureBox1.CreateGraphics();
-            Pen myPen = new Pen(Color.Black, 2);
-            Graphics graphics;
-            Pair<Point3D, Point3D> edge;
-
-
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
-            Letter.paintEdges(pictureBox1);
-            //for (int i = 0; i < edges.count - 3; i++)
-            //{
-            //    edge = edges[i];
-            //    graphics = graphics.fromimage(picturebox1.image);
-            //    if (free_projection == 1)
-            //    {
-            //        f = edge.first.freeprojectionxoy();
-            //        s = edge.second.freeprojectionxoy();
-            //    }
-            //    else
-            //    {
-            //        f = edge.first.projectionxoywithrot();
-            //        s = edge.second.projectionxoywithrot();
-            //    }
-            //    using (graphics graph = graphics)
-            //        graph.drawline(mypen, new point(f.x, f.y), new point(s.x, s.y));
-            //}
-
-
-            myPen = new Pen(Color.Red, 2);
-            edge = edges[edges.Count - 3]; 
-            graphics = Graphics.FromImage(pictureBox1.Image);
-            if (FREE_PROJECTION == 1)
+            foreach (Figure fig in poligons)
             {
-                f = edge.First.freeProjectionXOY();
-                s = edge.Second.freeProjectionXOY();
+                fig.paintEdges(pictureBox1, Color.Aqua, typeOfProjection);
             }
-            else
-            {
-                f = edge.First.projectionXOYwithRot();
-                s = edge.Second.projectionXOYwithRot();
-            }
-            using (Graphics graph = graphics)
-                graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
             
-            myPen = new Pen(Color.Green, 2);
-            edge = edges[edges.Count - 2]; 
-            graphics = Graphics.FromImage(pictureBox1.Image);
-            if (FREE_PROJECTION == 1)
-            {
-                f = edge.First.freeProjectionXOY();
-                s = edge.Second.freeProjectionXOY();
-            }
-            else
-            {
-                f = edge.First.projectionXOYwithRot();
-                s = edge.Second.projectionXOYwithRot();
-            }
-            using (Graphics graph = graphics)
-                graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
+            Letter.paintEdges(pictureBox1, Color.Black, typeOfProjection);
 
-            myPen = new Pen(Color.Blue, 2);
-            edge = edges[edges.Count - 1];
-            graphics = Graphics.FromImage(pictureBox1.Image);
-            if (FREE_PROJECTION == 1)
-            {
-                f = edge.First.freeProjectionXOY();
-                s = edge.Second.freeProjectionXOY();
-            }
-            else
-            {
-                f = edge.First.projectionXOYwithRot();
-                s = edge.Second.projectionXOYwithRot();
-            }
-            using (Graphics graph = graphics)
-                graph.DrawLine(myPen, new Point(f.X, f.Y), new Point(s.X, s.Y));
+            axis[0].paintEdges(pictureBox1, Color.Red, typeOfProjection);
+            axis[1].paintEdges(pictureBox1, Color.Green, typeOfProjection);
+            axis[2].paintEdges(pictureBox1, Color.Blue, typeOfProjection);
 
             pictureBox1.Refresh();
         }
@@ -218,7 +182,7 @@ namespace lab1
             Letter.rotateY(continuousRotationY * Math.PI / 180);
             Letter.rotateZ(continuousRotationZ* Math.PI / 180);
 
-            paintPictureBox(edges);
+            paintPictureBox();
         }
 
 
@@ -336,9 +300,13 @@ namespace lab1
             {
                 speedOfAnime -= stepOfSpeedOfAnime;
             }
-            Letter.move(-x, -y, -z);
-            Letter.scale(speedOfAnime, speedOfAnime, 1);
-            Letter.move(x, y, z);
+
+            foreach(Figure fig in allFigures)
+            {
+                fig.move(-x, -y, -z);
+                fig.scale(speedOfAnime, speedOfAnime, 1);
+                fig.move(x, y, z);
+            }
         }
 
 
@@ -456,12 +424,16 @@ namespace lab1
         private void buttonMove_Click(object sender, EventArgs e)
         {
             int x = 0;
-            int.TryParse(maskedTextBoxAnimX.Text, out x);
+            int.TryParse(maskedTextBoxMoveX.Text, out x);
             int y = 0;
-            int.TryParse(maskedTextBoxAnimY.Text, out y);
+            int.TryParse(maskedTextBoxMoveY.Text, out y);
             int z = 0;
-            int.TryParse(maskedTextBoxAnimZ.Text, out z);
-            Letter.move(x, y, z);
+            int.TryParse(maskedTextBoxMoveZ.Text, out z);
+
+            foreach(Figure fig in allFigures)
+            {
+                fig.move(x, y, z);
+            }
         }
 
         private void buttonRot_Click(object sender, EventArgs e)
@@ -478,15 +450,15 @@ namespace lab1
             double.TryParse(maskedTextBoxRotZ.Text, out z);
             z = z * Math.PI / 180;
 
-            Letter.rotateX(x);
-            Letter.rotateY(y);
-            Letter.rotateZ(z);
+            foreach (Figure fig in allFigures)
+            {
+                fig.rotateX(x);
+                fig.rotateY(y);
+                fig.rotateZ(z);
+            }
+            
         }
         #endregion
-
-
-
-
 
     }
 }
