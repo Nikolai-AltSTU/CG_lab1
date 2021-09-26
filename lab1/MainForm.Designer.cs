@@ -81,7 +81,7 @@ namespace lab1
             this.информацияToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(816, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1013, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -251,7 +251,7 @@ namespace lab1
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.pictureBox1.Location = new System.Drawing.Point(0, 56);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(800, 500);
+            this.pictureBox1.Size = new System.Drawing.Size(1000, 600);
             this.pictureBox1.TabIndex = 17;
             this.pictureBox1.TabStop = false;
             // 
@@ -268,7 +268,6 @@ namespace lab1
             this.buttonXMinus.TabIndex = 19;
             this.buttonXMinus.Text = "-";
             this.buttonXMinus.UseVisualStyleBackColor = true;
-            this.buttonXMinus.Click += new System.EventHandler(this.buttonXMinus_Click);
             this.buttonXMinus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonXMinus_MouseDown);
             this.buttonXMinus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonXMinus_MouseUp);
             // 
@@ -281,7 +280,6 @@ namespace lab1
             this.buttonXPlus.TabIndex = 20;
             this.buttonXPlus.Text = "+";
             this.buttonXPlus.UseVisualStyleBackColor = true;
-            this.buttonXPlus.Click += new System.EventHandler(this.buttonXPlus_Click);
             this.buttonXPlus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonXPlus_MouseDown);
             this.buttonXPlus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonXPlus_MouseUp);
             // 
@@ -293,7 +291,6 @@ namespace lab1
             this.buttonYMinus.TabIndex = 21;
             this.buttonYMinus.Text = "-";
             this.buttonYMinus.UseVisualStyleBackColor = true;
-            this.buttonYMinus.Click += new System.EventHandler(this.buttonYMinus_Click);
             this.buttonYMinus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonYMinus_MouseDown);
             this.buttonYMinus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonYMinus_MouseUp);
             // 
@@ -305,7 +302,6 @@ namespace lab1
             this.buttonYPlus.TabIndex = 22;
             this.buttonYPlus.Text = "+";
             this.buttonYPlus.UseVisualStyleBackColor = true;
-            this.buttonYPlus.Click += new System.EventHandler(this.buttonYPlus_Click);
             this.buttonYPlus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonYPlus_MouseDown);
             this.buttonYPlus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonYPlus_MouseUp);
             // 
@@ -317,7 +313,6 @@ namespace lab1
             this.buttonZMinus.TabIndex = 23;
             this.buttonZMinus.Text = "-";
             this.buttonZMinus.UseVisualStyleBackColor = true;
-            this.buttonZMinus.Click += new System.EventHandler(this.buttonZMinus_Click);
             this.buttonZMinus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonZMinus_MouseDown);
             this.buttonZMinus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonZMinus_MouseUp);
             // 
@@ -329,7 +324,6 @@ namespace lab1
             this.buttonZPlus.TabIndex = 24;
             this.buttonZPlus.Text = "+";
             this.buttonZPlus.UseVisualStyleBackColor = true;
-            this.buttonZPlus.Click += new System.EventHandler(this.buttonZPlus_Click);
             this.buttonZPlus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonZPlus_MouseDown);
             this.buttonZPlus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonZPlus_MouseUp);
             // 
@@ -341,7 +335,6 @@ namespace lab1
             this.buttonRolMaxZ.TabIndex = 30;
             this.buttonRolMaxZ.Text = "+";
             this.buttonRolMaxZ.UseVisualStyleBackColor = true;
-            this.buttonRolMaxZ.Click += new System.EventHandler(this.buttonRolMaxZ_Click);
             this.buttonRolMaxZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxZ_MouseDown);
             this.buttonRolMaxZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxZ_MouseUp);
             // 
@@ -354,7 +347,6 @@ namespace lab1
             this.buttonRolMinZ.TabIndex = 29;
             this.buttonRolMinZ.Text = "-";
             this.buttonRolMinZ.UseVisualStyleBackColor = true;
-            this.buttonRolMinZ.Click += new System.EventHandler(this.buttonRolMinZ_Click);
             this.buttonRolMinZ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinZ_MouseDown);
             this.buttonRolMinZ.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinZ_MouseUp);
             // 
@@ -366,7 +358,6 @@ namespace lab1
             this.buttonRolMaxY.TabIndex = 28;
             this.buttonRolMaxY.Text = "+";
             this.buttonRolMaxY.UseVisualStyleBackColor = true;
-            this.buttonRolMaxY.Click += new System.EventHandler(this.buttonRolMaxY_Click);
             this.buttonRolMaxY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxY_MouseDown);
             this.buttonRolMaxY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxY_MouseUp);
             // 
@@ -379,7 +370,6 @@ namespace lab1
             this.buttonRolMinY.TabIndex = 27;
             this.buttonRolMinY.Text = "-";
             this.buttonRolMinY.UseVisualStyleBackColor = true;
-            this.buttonRolMinY.Click += new System.EventHandler(this.buttonRolMinY_Click);
             this.buttonRolMinY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinY_MouseDown);
             this.buttonRolMinY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinY_MouseUp);
             // 
@@ -392,7 +382,6 @@ namespace lab1
             this.buttonRolMaxX.TabIndex = 26;
             this.buttonRolMaxX.Text = "+";
             this.buttonRolMaxX.UseVisualStyleBackColor = true;
-            this.buttonRolMaxX.Click += new System.EventHandler(this.buttonRolMaxX_Click);
             this.buttonRolMaxX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxX_MouseDown);
             this.buttonRolMaxX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMaxX_MouseUp);
             // 
@@ -405,7 +394,6 @@ namespace lab1
             this.buttonRolMinX.TabIndex = 25;
             this.buttonRolMinX.Text = "-";
             this.buttonRolMinX.UseVisualStyleBackColor = true;
-            this.buttonRolMinX.Click += new System.EventHandler(this.buttonRolMinX_Click);
             this.buttonRolMinX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinX_MouseDown);
             this.buttonRolMinX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonRolMinX_MouseUp);
             // 
@@ -448,7 +436,7 @@ namespace lab1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(816, 565);
+            this.ClientSize = new System.Drawing.Size(1013, 670);
             this.Controls.Add(this.maskedTextBoxAnimZ);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.maskedTextBoxAnimY);
