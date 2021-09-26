@@ -15,8 +15,8 @@ namespace lab1
     {
         const int XOY_PROJECTION = 0;
         const int FREE_PROJECTION = 1;
-        //protected int typeOfProjection = FREE_PROJECTION;
-        protected int typeOfProjection = XOY_PROJECTION;
+        protected int typeOfProjection = FREE_PROJECTION;
+        //protected int typeOfProjection = XOY_PROJECTION;
 
         double x0 = 0, y0 = 0, z0 = 0;
         Figure Letter;
