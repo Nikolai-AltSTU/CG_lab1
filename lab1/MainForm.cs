@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 
 namespace lab1
@@ -26,7 +28,10 @@ namespace lab1
         List<Figure> allFigures;
         const int rotStep = 1;
         const int moveStep = 2;
-        int maxX = 800, maxY = 600;
+        int xMax = 800, yMax = 600;
+
+        int yPositionForShowPainting = 0;
+        int yDeltaForShowPainting = 30;
 
         protected void init()
         {
@@ -34,13 +39,14 @@ namespace lab1
             axis = new List<Figure>();
             Letter = new Figure();
             allFigures = new List<Figure>();
-            maxX = pictureBox1.Width;
-            maxY = pictureBox1.Height;
+            xMax = pictureBoxOfScene.Width;
+            yMax = pictureBoxOfScene.Height;
         }
 
         protected void makeAxis()
         {
             // оси 
+            axis.Clear();
             axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(3, 0, 0) } ));
             axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(0, 3, 0) } ));
             axis.Add(new Figure(new List<Point3D>() { new Point3D(0, 0, 0), new Point3D(0, 0, 3) } ));
@@ -95,6 +101,7 @@ namespace lab1
 
         protected void makePoligons()
         {
+            poligons.Clear();
             //   new Point3D( , , )
 
             //  9 * x + 2 * y + 3 * z + 4 = 0 
@@ -103,6 +110,7 @@ namespace lab1
             ((Flat)poligons.Last()).addPoint(2, 3);
             ((Flat)poligons.Last()).addPoint(11, 5);
             ((Flat)poligons.Last()).addPoint(4, 11);
+            poligons.Last().color = Color.Crimson;
 
             // 10 * x + 4 * y + 8 * z + 2 = 0
             //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, 5), new Point3D(16, 3, 20), new Point3D(16, 9, 20), new Point3D(8, 9, 5) })); 
@@ -111,7 +119,7 @@ namespace lab1
             ((Flat)poligons.Last()).addPoint(16, 3);
             ((Flat)poligons.Last()).addPoint(16, 9);
             ((Flat)poligons.Last()).addPoint(8, 9);
-
+            poligons.Last().color = Color.DarkSlateGray;
 
             // 10 * x + 4 * y + 8 * z + 2 = 0
             //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
@@ -149,56 +157,134 @@ namespace lab1
             y0 += dy;
             z0 += dz;
         }
+        
+        protected void prepareScene()
+        {
+            makeAxis();
+            makePoligons();
 
+            scaleAllScene(20);
+            moveAllScene(200, 100, 0);
+        }
         public MainForm()
         {
             InitializeComponent();
             init();
-
-            makeAxis();
-            makePoligons();
-            makeLetter();
-
-            scaleAllScene(20);
-            moveAllScene(200,100, 0);
-
-            timer1.Start();
+            prepareScene();
+            timerOfPainting.Start();
         }
 
+        void paintAxes()
+        {
+            axis[0].paintEdges(pictureBoxOfScene, Color.Red, typeOfProjection);
+            axis[1].paintEdges(pictureBoxOfScene, Color.Green, typeOfProjection);
+            axis[2].paintEdges(pictureBoxOfScene, Color.Blue, typeOfProjection);
+        }
         void paintPictureBox()
         {
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pictureBoxOfScene.Image = new Bitmap(pictureBoxOfScene.Width, pictureBoxOfScene.Height);
+            paintAxes();
 
             foreach (Figure fig in poligons)
             {
-                fig.paintEdges(pictureBox1, Color.Aqua, typeOfProjection);
+                fig.paintEdges(pictureBoxOfScene, Color.Aqua, typeOfProjection);
             }
             
-            Letter.paintEdges(pictureBox1, Color.Black, typeOfProjection);
+            Letter.paintEdges(pictureBoxOfScene, Color.Black, typeOfProjection);
 
-            axis[0].paintEdges(pictureBox1, Color.Red, typeOfProjection);
-            axis[1].paintEdges(pictureBox1, Color.Green, typeOfProjection);
-            axis[2].paintEdges(pictureBox1, Color.Blue, typeOfProjection);
-
-            pictureBox1.Refresh();
+            pictureBoxOfScene.Refresh();
         }
 
         //4.	Построчное сканирование с использованием z-буфера
-        protected void lineZbuffer()
+        protected void paintPictureBoxWithLineZbuffer(Color colorOfFon)
         {
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pictureBoxOfScene.Image = new Bitmap(pictureBoxOfScene.Width, pictureBoxOfScene.Height);
             
+            Bitmap bitmapBuffer = new Bitmap(pictureBoxOfScene.Image);
+            using (var g = Graphics.FromImage(bitmapBuffer))
+                g.Clear(colorOfFon); // g.FillRectangle(Brushes.Black, 0, 0, bmp.Width, bmp.Height);
 
+            int numberOfPoligons = poligons.Count();
+            List<Flat> projections = new List<Flat>();
+            for(int i = 0; i < numberOfPoligons; i++)
+            {
+                projections.Add(poligons[i].projection(2));
+                projections[i].findMinMaxXY();
+                projections[i].findCoefOfZfunction();
+            }
+
+            List<List<int>> lineBuffers = new List<List<int>>(yMax);
+            for(int y = 0; y < yMax; y++)
+            {
+                lineBuffers.Add(new List<int>(xMax));
+            }
+            yPositionForShowPainting = (yPositionForShowPainting + yDeltaForShowPainting) % (yMax - yDeltaForShowPainting);
+            Parallel.For(0, yMax, y =>
+            {
+                
+                int[] zBuffer = new int[xMax + 1];
+                for (int x = 0; x < xMax; x++)
+                {
+                    zBuffer[x] = int.MaxValue;
+                }
+
+                for (int x = 0; x < xMax; x++)
+                {
+                    lineBuffers[y].Add(int.MinValue);
+                }
+
+                if (timerForAnimation.Enabled == false
+                || (yPositionForShowPainting < y && y < yPositionForShowPainting + yDeltaForShowPainting))
+                {
+                    Point3D aPoint = new Point3D(-2 * xMax, y, 0), bPoint = new Point3D(2 * xMax, y, 0);
+
+                    for (int flatKey = 0; flatKey < numberOfPoligons; flatKey++)
+                    {
+                        if (projections[flatKey].YMin > y || projections[flatKey].YMax < y)
+                            continue;
+                        List<Point> listOfPoints = projections[flatKey].intersections(aPoint, bPoint);
+                        // перебираем все пары точек
+                        for (int k = 0; k < listOfPoints.Count - 1; k += 2)
+                        {
+                            int xs = listOfPoints[k].X, xf = listOfPoints[k + 1].X;
+                            if (xs < 0)
+                                xs = 0;
+                            if (xf >= xMax)
+                                xf = xMax - 1;
+                            for (int x = xs; x <= xf; x++)
+                            {
+                                //int z = (int)((Flat)poligons[flatKey]).z(x, y);
+                                int z = (int)Math.Round((projections[flatKey]).z(x, y));
+                                if (z < zBuffer[x])
+                                {
+                                    zBuffer[x] = z;
+                                    lineBuffers[y][x] = flatKey;
+                                };
+                            }
+                        }
+                    };
+                }
+            });
+
+            for (int y = 0; y < yMax; y++)
+            {
+                for (int x = 0; x < xMax; x++)
+                {
+                    if (lineBuffers[y][x] != int.MinValue)
+                    {
+                        bitmapBuffer.SetPixel(x, y, poligons[lineBuffers[y][x]].color);
+                    }   
+                }
+            }
             
-            axis[0].paintEdges(pictureBox1, Color.Red, typeOfProjection);
-            axis[1].paintEdges(pictureBox1, Color.Green, typeOfProjection);
-            axis[2].paintEdges(pictureBox1, Color.Blue, typeOfProjection);
-
-            pictureBox1.Refresh();
+            pictureBoxOfScene.Image = bitmapBuffer;
+            paintAxes();
+            
+            pictureBoxOfScene.Refresh();
         }
 
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timerPainting_Tick(object sender, EventArgs e)
         {
             // движение при зажатой клавише
             foreach (Figure fig in allFigures)
@@ -213,7 +299,7 @@ namespace lab1
                     fig.rotateZ(continuousRotationZ * Math.PI / 180);
             }
 
-            paintPictureBox();
+            paintPictureBoxWithLineZbuffer(Color.Cornsilk);
         }
 
         #region buttons
@@ -229,11 +315,15 @@ namespace lab1
 
         private void информацияToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            MessageBox.Show("Лаборатораная работа №1 - Афинные преобразования \n Выполнена студентом группы ПИ-81 Стойко Н. И.\n" +
-                "  11. Масштабирование относительно произвольной точки" +
-                " одновременно по Х и У (коэффициенты задать) в плоскости " +
-                " ХОУ с постепенным возвратом к исходному состояниюс замедлением. ", "Информация о работе");
+            MessageBox.Show("Лаборатораная работа №2 - Сокрытие невидимых поверностей \n Выполнена студентом группы ПИ-81 Стойко Н. И.\n" +
+                "  4. Построчное сканирование с использованием z-буфера  ", "Информация о работе");
         }
+
+        private void сбросToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            prepareScene();
+        }
+
         #endregion
 
         #region lab1
@@ -369,6 +459,7 @@ namespace lab1
         {
             continuousRotationY = rotSpeed;
         }
+
         private void buttonRolMaxY_MouseUp(object sender, MouseEventArgs e)
         {
             continuousRotationY = 0;

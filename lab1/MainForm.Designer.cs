@@ -50,8 +50,8 @@ namespace lab1
             this.maskedTextBoxRotZ = new System.Windows.Forms.MaskedTextBox();
             this.buttonMove = new System.Windows.Forms.Button();
             this.buttonRot = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.pictureBoxOfScene = new System.Windows.Forms.PictureBox();
+            this.timerOfPainting = new System.Windows.Forms.Timer(this.components);
             this.buttonXMinus = new System.Windows.Forms.Button();
             this.buttonXPlus = new System.Windows.Forms.Button();
             this.buttonYMinus = new System.Windows.Forms.Button();
@@ -69,8 +69,9 @@ namespace lab1
             this.maskedTextBoxAnimY = new System.Windows.Forms.MaskedTextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.maskedTextBoxAnimZ = new System.Windows.Forms.MaskedTextBox();
+            this.сбросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOfScene)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -78,10 +79,11 @@ namespace lab1
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.стартToolStripMenuItem,
             this.стопToolStripMenuItem,
-            this.информацияToolStripMenuItem});
+            this.информацияToolStripMenuItem,
+            this.сбросToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1013, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(813, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -246,19 +248,19 @@ namespace lab1
             this.buttonRot.UseVisualStyleBackColor = true;
             this.buttonRot.Click += new System.EventHandler(this.buttonRot_Click);
             // 
-            // pictureBox1
+            // pictureBoxOfScene
             // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 56);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1000, 600);
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxOfScene.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBoxOfScene.Location = new System.Drawing.Point(0, 56);
+            this.pictureBoxOfScene.Name = "pictureBoxOfScene";
+            this.pictureBoxOfScene.Size = new System.Drawing.Size(800, 500);
+            this.pictureBoxOfScene.TabIndex = 17;
+            this.pictureBoxOfScene.TabStop = false;
             // 
-            // timer1
+            // timerOfPainting
             // 
-            this.timer1.Interval = 20;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerOfPainting.Interval = 20;
+            this.timerOfPainting.Tick += new System.EventHandler(this.timerPainting_Tick);
             // 
             // buttonXMinus
             // 
@@ -432,11 +434,18 @@ namespace lab1
             this.maskedTextBoxAnimZ.Size = new System.Drawing.Size(39, 23);
             this.maskedTextBoxAnimZ.TabIndex = 35;
             // 
+            // сбросToolStripMenuItem
+            // 
+            this.сбросToolStripMenuItem.Name = "сбросToolStripMenuItem";
+            this.сбросToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.сбросToolStripMenuItem.Text = "     Сброс";
+            this.сбросToolStripMenuItem.Click += new System.EventHandler(this.сбросToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1013, 670);
+            this.ClientSize = new System.Drawing.Size(813, 570);
             this.Controls.Add(this.maskedTextBoxAnimZ);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.maskedTextBoxAnimY);
@@ -453,7 +462,7 @@ namespace lab1
             this.Controls.Add(this.buttonYMinus);
             this.Controls.Add(this.buttonXPlus);
             this.Controls.Add(this.buttonXMinus);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pictureBoxOfScene);
             this.Controls.Add(this.buttonRot);
             this.Controls.Add(this.buttonMove);
             this.Controls.Add(this.maskedTextBoxRotZ);
@@ -476,7 +485,7 @@ namespace lab1
             this.Text = "Лабораторная работа №1";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOfScene)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -502,8 +511,8 @@ namespace lab1
         private System.Windows.Forms.MaskedTextBox maskedTextBoxRotZ;
         private System.Windows.Forms.Button buttonMove;
         private System.Windows.Forms.Button buttonRot;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.PictureBox pictureBoxOfScene;
+        private System.Windows.Forms.Timer timerOfPainting;
         private System.Windows.Forms.ToolStripMenuItem стопToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem информацияToolStripMenuItem;
         private System.Windows.Forms.Button buttonXMinus;
@@ -523,6 +532,7 @@ namespace lab1
         private System.Windows.Forms.MaskedTextBox maskedTextBoxAnimY;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxAnimX;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxAnimZ;
+        private System.Windows.Forms.ToolStripMenuItem сбросToolStripMenuItem;
     }
 }
 

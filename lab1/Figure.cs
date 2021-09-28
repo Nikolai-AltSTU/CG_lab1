@@ -126,18 +126,26 @@ namespace lab1
             for (int i = 0; i < edges.Count; i++)
             {
                 edge = edges[i];
-                if (typeOfProjection == 1)
+                switch(typeOfProjection)
                 {
+                    case 0:
+                        f = edge.First.projectionXOYwithRot();
+                        s = edge.Second.projectionXOYwithRot();
+                        break;
+                    case 1:
+                        f = edge.First.freeProjectionXOY();
+                        s = edge.Second.freeProjectionXOY();
+                        break;
+                    case 2:
+                        f = edge.First.freeProjectionXOYz1();
+                        s = edge.Second.freeProjectionXOYz1();
+                        break;
 
-                    f = edge.First.freeProjectionXOY();
-                    s = edge.Second.freeProjectionXOY();
+                    default:
+                        throw new Exception(" No such type of projection");
+                        break;
                 }
-                else
-                {
-                    f = edge.First.projectionXOYwithRot();
-                    s = edge.Second.projectionXOYwithRot();
-                }
-
+                
                 if(projection.points.Exists(x => x == f))
                 {
                     f = projection.points.Find(x => x == f);

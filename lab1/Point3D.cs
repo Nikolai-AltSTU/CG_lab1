@@ -140,6 +140,23 @@ namespace lab1
             double[] res = x * projectionM;
             return new Point3D(res[0], res[1], res[2], res[3]);
         }
+        public Point3D freeProjectionXOYz1(double angle = Math.PI / 4) // не изменяет z координату
+        {
+            Point point;
+            double cosA = Math.Cos(angle);
+            Matrix projectionM = new Matrix(
+            new double[][]
+                {
+                    new double[] {1, 0, 0, 0},
+                    new double[] {0, 1, 0 , 0},
+                    new double[] { cosA, -cosA, 1, 0},
+                    new double[] {0, 0, 0, 1}
+                });
+
+            double[] res = x * projectionM;
+            return new Point3D(res[0], res[1], res[2], res[3]);
+        }
+
 
         public static bool operator !=(Point3D a, Point3D b)
         {
