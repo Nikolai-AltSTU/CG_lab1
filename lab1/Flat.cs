@@ -231,12 +231,21 @@ namespace lab1
 
             intersectoinsPoint.Sort((a, b) => a.X - b.X);
 
-            //
-            if (intersectoinsPoint.Count % 2 == 1)
+            for (int i = 1; i < intersectoinsPoint.Count; i++)
             {
-                intersectoinsPoint.RemoveAt(0);
-                //intersectoinsPoint.RemoveAll(x => x.Y != aPoint.Y);
+                if(intersectoinsPoint[i-1].X == intersectoinsPoint[i].X && i % 2 == 0)
+                {
+                    intersectoinsPoint.RemoveAt(i);
+                    i = 0;
+                }
             }
+
+            /*if (intersectoinsPoint.Count % 2 == 1)
+            {
+                
+                intersectoinsPoint.RemoveAt(0);
+                intersectoinsPoint.RemoveAll(x => x.X != aPoint.X);
+            }*/
             return intersectoinsPoint;
         }
     }

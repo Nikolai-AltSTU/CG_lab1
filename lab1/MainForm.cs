@@ -102,24 +102,42 @@ namespace lab1
         protected void makePoligons()
         {
             poligons.Clear();
-            //   new Point3D( , , )
-
-            //  9 * x + 2 * y + 3 * z + 4 = 0 
-            //poligons.Add(new Figure(new List<Point3D>() { new Point3D(2, 3, -5), new Point3D( 11, 5, -5), new Point3D( 4, 11, -5) }));
+            
             poligons.Add(new Flat(1, 2, 12, 24));
             ((Flat)poligons.Last()).addPoint(2, 3);
             ((Flat)poligons.Last()).addPoint(11, 5);
             ((Flat)poligons.Last()).addPoint(4, 11);
             poligons.Last().color = Color.Crimson;
 
-            // 10 * x + 4 * y + 8 * z + 2 = 0
-            //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, 5), new Point3D(16, 3, 20), new Point3D(16, 9, 20), new Point3D(8, 9, 5) })); 
             poligons.Add(new Flat(2, 1, 10, 30));
             ((Flat)poligons.Last()).addPoint(8, 3);
             ((Flat)poligons.Last()).addPoint(16, 3);
             ((Flat)poligons.Last()).addPoint(16, 9);
             ((Flat)poligons.Last()).addPoint(8, 9);
             poligons.Last().color = Color.DarkSlateGray;
+
+            poligons.Add(new Flat(4, 5, 6, 24));
+            ((Flat)poligons.Last()).addPoint(3, 8);
+            ((Flat)poligons.Last()).addPoint(3, 3);
+            ((Flat)poligons.Last()).addPoint(4, 2);
+            ((Flat)poligons.Last()).addPoint(9, 1);
+            ((Flat)poligons.Last()).addPoint(8, 5);
+            poligons.Last().color = Color.DarkTurquoise;
+            
+            poligons.Add(new Flat(4, -5, 6, 24));
+            ((Flat)poligons.Last()).addPoint(4, 2);
+            ((Flat)poligons.Last()).addPoint(8, 5);
+            ((Flat)poligons.Last()).addPoint(3, 8);
+            poligons.Last().color = Color.BlueViolet;
+
+            poligons.Add(new Flat(-2, 4, 3, 30));
+            ((Flat)poligons.Last()).addPoint(0, 0);
+            ((Flat)poligons.Last()).addPoint(8, 4);
+            ((Flat)poligons.Last()).addPoint(10, 6);
+            ((Flat)poligons.Last()).addPoint(5, 6);
+            ((Flat)poligons.Last()).addPoint(0, 6);
+            ((Flat)poligons.Last()).addPoint(3, 4);
+            poligons.Last().color = Color.Brown;
 
             // 10 * x + 4 * y + 8 * z + 2 = 0
             //poligons.Add(new Figure(new List<Point3D>() { new Point3D(8, 3, - 11.75), new Point3D(16, 3, -21.75), new Point3D(16, 9, -24.75), new Point3D(8, 9, -14.75) })); 
